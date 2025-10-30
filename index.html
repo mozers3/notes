@@ -66,12 +66,35 @@
       text-align: center;
       color: #5f6368;
     }
+    .icon-button {
+  display: flex; /* Use flexbox for alignment */
+  align-items: center; /* Vertically align items */
+  gap: 8px; /* Space between icon and text */
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.button-icon {
+  width: 24px; /* Set SVG icon size */
+  height: 24px;
+}
   </style>
 </head>
 <body>
   <header>
     <h1>⭐ Мои файлы 333</h1>
   </header>
+  <button class="icon-button">
+  <svg class="button-icon" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9v-2h2v2zm0-4H9V7h2v6zm6 0h-2V7h2v6z"/>
+  </svg>
+  <span>Click Me</span>
+</button>
 
   <ul id="fileList">
     <li id="loading">Загрузка...</li>
@@ -124,5 +147,6 @@
 </body>
 
 </html>
+
 
 
