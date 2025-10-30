@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⭐ Starred Files</title>
+  <meta name="description" content="Доступ к вашим помеченным файлам Google Drive" />
+  <meta name="theme-color" content="#1a73e8" />
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json" />
+  
+  <!-- Иконки -->
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+
+  <style>
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 16px;
+      color: #202124;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 24px;
+      color: #1a73e8;
+    }
+    #fileList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #fileList li {
+      margin: 8px 0;
+    }
+    button.file-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 16px;
+      background: white;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      text-align: left;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s;
+    }
+    button.file-btn:hover {
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-color: #a0a0a0;
+    }
+    img.file-icon {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+    }
+    #loading {
+      text-align: center;
+      color: #5f6368;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⭐ Мои помеченные файлы</h1>
+  </header>
+
+  <ul id="fileList">
+    <li id="loading">Загрузка...</li>
+  </ul>
+
+  <script>
+    // 🔗 Укажите здесь URL вашего Google Apps Script (в режиме JSON!)
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+
+    async function loadFiles() {
+      try {
+        const response = await fetch(APPS_SCRIPT_URL);
+        if (!response.ok) throw new Error('Ошибка сети');
+        const files = await response.json();
+
+        const list = document.getElementById('fileList');
+        list.innerHTML = '';
+
+        if (files.length === 0) {
+          list.innerHTML = '<li>Нет помеченных файлов</li>';
+          return;
+        }
+
+        files.forEach(file => {
+          const li = document.createElement('li');
+          const btn = document.createElement('button');
+          btn.className = 'file-btn';
+          btn.onclick = () => window.open(file.url, '_blank');
+
+          const img = document.createElement('img');
+          img.className = 'file-icon';
+          img.src = 'images/umbrella.gif'; // ← ваша иконка
+          img.alt = '';
+
+          const span = document.createElement('span');
+          span.textContent = file.name;
+
+          btn.append(img, span);
+          li.append(btn);
+          list.append(li);
+        });
+      } catch (err) {
+        document.getElementById('loading').textContent = '❌ Ошибка: ' + err.message;
+      }
+    }
+
+    // Загружаем при старте
+    loadFiles();
+  </script>
+</body>
+</html>
