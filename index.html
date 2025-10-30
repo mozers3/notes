@@ -44,7 +44,9 @@
 
     async function loadFiles() {
       try {
-        const response = await fetch(APPS_SCRIPT_URL);
+        const response = await fetch(APPS_SCRIPT_URL, {
+          credentials: 'include'  // ← важно для авторизации
+        });
         if (!response.ok) throw new Error('Ошибка сети');
         const files = await response.json();
 
@@ -70,6 +72,7 @@
           list.append(li);
         });
       } catch (err) {
+        console.error("Fetch error:", err);
         document.getElementById('loading').textContent = '❌ Ошибка: ' + err.message;
       }
     }
