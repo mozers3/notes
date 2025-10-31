@@ -3,23 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Starred Files</title>
+  <title>Google Drive Files</title>
+  <style>
+    .nav {
+      margin-bottom: 1rem;
+    }
+    .nav a {
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      color: #000;
+      background: #fff;
+      border: 1px solid #ccc;
+      margin-right: 0.5rem;
+    }
+    .nav a.active {
+      background: #eee;
+      font-weight: bold;
+    }
+    #fileList {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    #fileList li {
+      margin: 0.3rem 0;
+    }
+  </style>
 </head>
 <body>
-  <ul id="fileList">Загрузка...</ul>
-  <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjEQ__SBemp2UP9MtaxlUJ9V5B8VkA2dqEZML2vy0o4Gt5cu4MjgKYIcHpvqeS-EPOBA/exec';
 
-    fetch(SCRIPT_URL)
+<div class="nav">
+  <a href="#" id="link-starred" class="active">Starred Files</a>
+  <a href="#" id="link-all">All Files</a>
+</div>
+
+<h1 id="title">Избранные файлы</h1>
+<ul id="fileList">Загрузка...</ul>
+
+<script>
+  // ⚠️ ЗАМЕНИТЕ НА СВОЙ URL ВЕБ-ПРИЛОЖЕНИЯ
+  const BASE_URL = 'https://script.google.com/macros/s/AKfycbwjEQ__SBemp2UP9MtaxlUJ9V5B8VkA2dqEZML2vy0o4Gt5cu4MjgKYIcHpvqeS-EPOBA/exec';
+
+  const linkStarred = document.getElementById('link-starred');
+  const linkAll = document.getElementById('link-all');
+  const titleEl = document.getElementById('title');
+  const fileList = document.getElementById('fileList');
+
+  function setActiveLink(isStarred) {
+    linkStarred.classList.toggle('active', isStarred);
+    linkAll.classList.toggle('active', !isStarred);
+  }
+
+  function loadFiles(action) {
+    const url = `${BASE_URL}?action=${action}`;
+    fileList.innerHTML = 'Загрузка...';
+    titleEl.textContent = action === 'listStarred' ? 'Избранные файлы' : 'Все файлы';
+
+    fetch(url)
       .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();
       })
       .then(files => {
-        const list = document.getElementById('fileList');
-        list.innerHTML = ''; // очистить "Загрузка..."
-        if (files.length === 0) {
-          list.innerHTML = '<li>Нет избранных файлов</li>';
+        fileList.innerHTML = '';
+        if (!Array.isArray(files) || files.length === 0) {
+          fileList.innerHTML = '<li>Нет файлов</li>';
           return;
         }
         files.forEach(file => {
@@ -29,19 +76,30 @@
           a.target = '_blank';
           a.textContent = file.name;
           li.appendChild(a);
-          list.appendChild(li);
+          fileList.appendChild(li);
         });
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = SCRIPT_URL + '?action=listAll';
-        a.textContent = '+';
-        li.appendChild(a);
-        list.appendChild(li);
       })
       .catch(err => {
-        document.getElementById('fileList').innerHTML = `<li>Ошибка: ${err.message}</li>`;
-        console.error(err);
+        fileList.innerHTML = `<li>Ошибка: ${err.message}</li>`;
+        console.error('Fetch error:', err);
       });
-  </script>
+  }
+
+  // Обработчики кликов
+  linkStarred.addEventListener('click', e => {
+    e.preventDefault();
+    setActiveLink(true);
+    loadFiles('listStarred');
+  });
+
+  linkAll.addEventListener('click', e => {
+    e.preventDefault();
+    setActiveLink(false);
+    loadFiles('listAll');
+  });
+
+  // Загрузка избранных файлов при старте
+  loadFiles('listStarred');
+</script>
 </body>
 </html>
