@@ -1,25 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Notes by Google</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-  <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
-  <style>
-    * {
-      font-family: verdana;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Starred Files</title>
 </head>
 <body>
-  <header>
-    <h1>Notes by Google ver.3</h1>
-  </header>
-  <ul>
-    <li>Документ 1</li>
-    <li>Документ 2</li>
-    <li>Документ 3</li>
-  </ul>
+  <h1>Избранные файлы</h1>
+  <ul id="fileList">Загрузка...</ul>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjEQ__SBemp2UP9MtaxlUJ9V5B8VkA2dqEZML2vy0o4Gt5cu4MjgKYIcHpvqeS-EPOBA/exec';
+
+    fetch(SCRIPT_URL)
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+      })
+      .then(files => {
+        const list = document.getElementById('fileList');
+        list.innerHTML = ''; // очистить "Загрузка..."
+        if (files.length === 0) {
+          list.innerHTML = '<li>Нет избранных файлов</li>';
+          return;
+        }
+        files.forEach(file => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = file.url;
+          a.target = '_blank';
+          a.textContent = file.name;
+          li.appendChild(a);
+          list.appendChild(li);
+        });
+      })
+      .catch(err => {
+        document.getElementById('fileList').innerHTML = `<li>Ошибка: ${err.message}</li>`;
+        console.error(err);
+      });
+  </script>
 </body>
 </html>
