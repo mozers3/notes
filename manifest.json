@@ -1,7 +1,7 @@
 {
-  "name": "Starred Files",
-  "short_name": "Starred",
-  "description": "Доступ к помеченным файлам Google Drive",
+  "name": "Notes by Google",
+  "short_name": "notes",
+  "description": "Notes by Google",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
