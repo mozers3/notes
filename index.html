@@ -5,27 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Google Drive Files</title>
   <style>
-    .nav {
-      margin-bottom: 1rem;
-    }
     .nav a {
-      padding: 0.5rem 1rem;
       text-decoration: none;
-      color: #000;
       background: #fff;
-      border: 1px solid #ccc;
-      margin-right: 0.5rem;
     }
     .nav a.active {
       background: #eee;
       font-weight: bold;
-    }
-    #fileList {
-      list-style-type: none;
-      padding-left: 0;
-    }
-    #fileList li {
-      margin: 0.3rem 0;
     }
   </style>
 </head>
@@ -56,7 +42,6 @@
   function loadFiles(action) {
     const url = `${BASE_URL}?action=${action}`;
     fileList.innerHTML = 'Загрузка...';
-    titleEl.textContent = action === 'listStarred' ? 'Избранные файлы' : 'Все файлы';
 
     fetch(url)
       .then(response => {
