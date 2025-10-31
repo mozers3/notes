@@ -1,84 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>⭐ Starred Files</title>
-  <meta name="description" content="Доступ к вашим помеченным файлам Google Drive" />
-  <meta name="theme-color" content="#1a73e8" />
-  
-  <!-- PWA Manifest -->
+  <title>Notes</title>
   <link rel="manifest" href="manifest.json" />
-  
-  <!-- Иконки -->
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
   <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
-
   <style>
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #f8f9fa;
-      margin: 0;
-      padding: 16px;
-      color: #202124;
-    }
-    header {
-      text-align: center;
-      margin-bottom: 20px;
+    * {
+      font-family: verdana;
     }
   </style>
 </head>
 <body>
-
   <header>
-    <h1>⭐ Мои файлы min</h1>
+    <h1>Notes</h1>
   </header>
-
-  <ul id="fileList">
-    <li id="loading">Загрузка...</li>
+  <ul>
+    <li>Документ 1</li>
+    <li>Документ 2</li>
+    <li>Документ 3</li>
   </ul>
-
-  <script>
-    // 🔗 Укажите здесь URL вашего Google Apps Script (в режиме JSON!)
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxIntNVmaUv94N8qmwBUSf54wPeqVdZ7fItQ0xy8wgq5ObBM5QjeXL8A2D4odwApqBP-g/exec';
-
-    async function loadFiles() {
-      try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-          credentials: 'include'  // ← важно для авторизации
-        });
-        if (!response.ok) throw new Error('Ошибка сети');
-        const files = await response.json();
-
-        const list = document.getElementById('fileList');
-        list.innerHTML = '';
-
-        if (files.length === 0) {
-          list.innerHTML = '<li>Нет помеченных файлов</li>';
-          return;
-        }
-
-        files.forEach(file => {
-          const li = document.createElement('li');
-          const btn = document.createElement('button');
-          btn.className = 'file-btn';
-          btn.onclick = () => window.open(file.url, '_blank');
-
-          const span = document.createElement('span');
-          span.textContent = file.name;
-
-          btn.append(img, span);
-          li.append(btn);
-          list.append(li);
-        });
-      } catch (err) {
-        console.error("Fetch error:", err);
-        document.getElementById('loading').textContent = '❌ Ошибка: ' + err.message;
-      }
-    }
-
-    // Загружаем при старте
-    loadFiles();
-  </script>
 </body>
 </html>
