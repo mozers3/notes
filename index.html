@@ -7,18 +7,21 @@
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <title>Google Drive Files</title>
   <style>
-    div {
+	div {
       padding: 2px 4px;
     }
-    span {
-      width: 50%;
+    .link {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 60px; /* опционально: отступы от краёв */
+      box-sizing: border-box;
     }
-    .nav a {
+    .link a {
       text-decoration: none;
-      padding: 6px 12px;
-      font-size: 12px;
+      padding: 6px 100px;
+      font-size: 14px;
     }
-    .nav a.active {
+    .link a.active {
       background: #33CCFF;
     }
     button {
@@ -52,10 +55,11 @@
 </head>
 <body>
 
-<div>
-  <span class="nav"><a href="#" id="link-starred" class="active">Starred Files</a></span>
-  <span class="nav"><a href="#" id="link-all">All Files</a></span>
-</div>
+	<div class="link">
+	  <a href="#" id="link-starred" class="active">Starred Files</a>
+	  <a href="#" id="link-all">All Files</a>
+	</div>
+
 
 <div id="fileList">Loading...</div>
 
