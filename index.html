@@ -1,127 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="manifest" href="./manifest.json">
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <title>Google Drive Files</title>
-  <style>
-	div {
-      padding: 2px 4px;
-    }
-    .link {
-      display: flex;
-      justify-content: space-between;
-      padding: 0 12px; /* опционально: отступы от краёв */
-      box-sizing: border-box;
-    }
-    .link a {
-      text-decoration: none;
-      padding: 6px 24px;
-      font-size: 14px;
-    }
-    .link a.active {
-      background: #33CCFF;
-    }
-    button {
-        width:100%;
-        text-align:left;
-        padding: 12px 24px;
-        font-size: 16px;
-        font-weight: bold;
-        color: #333;
-        background-color: transparent;
-        border: 2px solid #007BFF;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    button:hover {
-        background-color: #007BFF;
-        color: white;
-        box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
-    }
-  </style>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(() => console.log('SW registered'))
-          .catch(err => console.warn('SW failed:', err));
-      });
-    }
-  </script>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="manifest" href="./manifest.json">
+	<link rel="icon" href="favicon.ico" type="image/x-icon" />
+	<title>Google Drive Files</title>
+	<style>
+		div {
+			padding: 2px 4px;
+		}
+		.link {
+			display: flex;
+			justify-content: space-between;
+			padding: 0 12px; /* опционально: отступы от краёв */
+			box-sizing: border-box;
+		}
+		.link a {
+			text-decoration: none;
+			padding: 6px 24px;
+			font-size: 14px;
+		}
+		.link a.active {
+			background: #33CCFF;
+		}
+		button {
+			width:100%;
+			text-align:left;
+			padding: 12px 24px;
+			font-size: 16px;
+			font-weight: bold;
+			color: #333;
+			background-color: transparent;
+			border: 2px solid #007BFF;
+			border-radius: 6px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+		button:hover {
+			background-color: #007BFF;
+			color: white;
+			box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+		}
+	</style>
+	<script>
+		if ('serviceWorker' in navigator) {
+			window.addEventListener('load', () => {
+				navigator.serviceWorker.register('./sw.js')
+					.then(() => console.log('SW registered'))
+					.catch(err => console.warn('SW failed:', err));
+			});
+		}
+	</script>
 </head>
 <body>
-
-	<div class="link">
-	  <a href="#" id="link-starred" class="active">Starred Files</a>
-	  <a href="#" id="link-all">All Files</a>
-	</div>
-
+<div class="link">
+	<a href="#" id="link-starred" class="active">Starred Files</a>
+	<a href="#" id="link-all">All Files</a>
+</div>
 
 <div id="fileList">Loading...</div>
 
 <script>
-  const BASE_URL = 'https://script.google.com/macros/s/AKfycbzZkkFGOYbwY-BLySFjnWIFmGmhKB8cp5QAnBJ_4_SKKZBzX2alDBdfca8n25XuuBf6Yg/exec';
+	const BASE_URL = 'https://script.google.com/macros/s/AKfycbwHwyMAIJsGWnyaoX62fYGWft92Wv26fcjnFw4hg5k3LhONxxCd5zRW289d3tLOprO34Q/exec';
 
-  const linkStarred = document.getElementById('link-starred');
-  const linkAll = document.getElementById('link-all');
-  const fileList = document.getElementById('fileList');
+	const linkStarred = document.getElementById('link-starred');
+	const linkAll = document.getElementById('link-all');
+	const fileList = document.getElementById('fileList');
 
-  function setActiveLink(isStarred) {
-    linkStarred.classList.toggle('active', isStarred);
-    linkAll.classList.toggle('active', !isStarred);
-  }
+	function setActiveLink(isStarred) {
+		linkStarred.classList.toggle('active', isStarred);
+		linkAll.classList.toggle('active', !isStarred);
+	}
 
-  function loadFiles(action) {
-    const url = `${BASE_URL}?action=${action}`;
-    fileList.innerHTML = 'Загрузка...';
+	function loadFiles(action) {
+		const url = `${BASE_URL}?action=${action}`;
+		fileList.innerHTML = 'Loading...';
 
-    fetch(url)
-      .then(response => {
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.json();
-      })
-      .then(files => {
-        fileList.innerHTML = '';
-        if (!Array.isArray(files) || files.length === 0) {
-          fileList.innerHTML = '<li>Нет файлов</li>';
-          return;
-        }
-        files.forEach(file => {
-          const div = document.createElement('div');
-          const button = document.createElement('button');
-          button.textContent = file.name;
-          button.addEventListener('click', () => {
-            window.open(file.url, '_blank');
-          });
-          div.appendChild(button);
-          fileList.appendChild(div);
-        });
-      })
-      .catch(err => {
-        fileList.innerHTML = `<li>Ошибка: ${err.message}</li>`;
-        console.error('Fetch error:', err);
-      });
-  }
+		fetch(url)
+			.then(response => {
+				if (!response.ok) throw new Error(`HTTP ${response.status}`);
+				return response.json();
+			})
+			.then(files => {
+				fileList.innerHTML = '';
+				if (!Array.isArray(files) || files.length === 0) {
+					fileList.innerHTML = '<li>Нет файлов</li>';
+					return;
+				}
+				files.forEach(file => {
+					const div = document.createElement('div');
+					const button = document.createElement('button');
+					button.textContent = file.name;
+					button.addEventListener('click', () => {
+						window.open(file.url, '_blank');
+					});
+					div.appendChild(button);
+					fileList.appendChild(div);
+				});
+			})
+			.catch(err => {
+				fileList.innerHTML = `<li>Ошибка: ${err.message}</li>`;
+				console.error('Fetch error:', err);
+			});
+	}
 
-  // Обработчики кликов
-  linkStarred.addEventListener('click', e => {
-    e.preventDefault();
-    setActiveLink(true);
-    loadFiles('listStarred');
-  });
+	// Обработчики кликов
+	linkStarred.addEventListener('click', e => {
+		e.preventDefault();
+		setActiveLink(true);
+		loadFiles('listStarred');
+	});
 
-  linkAll.addEventListener('click', e => {
-    e.preventDefault();
-    setActiveLink(false);
-    loadFiles('listAll');
-  });
+	linkAll.addEventListener('click', e => {
+		e.preventDefault();
+		setActiveLink(false);
+		loadFiles('listAll');
+	});
 
-  // Загрузка избранных файлов при старте
-  loadFiles('listStarred');
+	// Загрузка избранных файлов при старте
+	loadFiles('listStarred');
 </script>
 </body>
 </html>
