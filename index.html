@@ -6,13 +6,26 @@
   <link rel="manifest" href="./manifest.json">
   <title>Google Drive Files</title>
   <style>
-    .nav a {
-      text-decoration: none;
-      background: #fff;
+    div {
+        padding: 2px 4px;
     }
-    .nav a.active {
-      background: #eee;
-      font-weight: bold;
+    button {
+        width:70%;
+        text-align:left;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        background-color: transparent;
+        border: 2px solid #007BFF;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    button:hover {
+        background-color: #007BFF;
+        color: white;
+        box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
     }
   </style>
   <script>
@@ -32,7 +45,7 @@
   <a href="#" id="link-all">All Files</a>
 </div>
 
-<ul id="fileList">Loading...</ul>
+<div id="fileList">Loading...</div>
 
 <script>
   const BASE_URL = 'https://script.google.com/macros/s/AKfycbzZkkFGOYbwY-BLySFjnWIFmGmhKB8cp5QAnBJ_4_SKKZBzX2alDBdfca8n25XuuBf6Yg/exec';
@@ -62,13 +75,14 @@
           return;
         }
         files.forEach(file => {
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          a.href = file.url;
-          a.target = '_blank';
-          a.textContent = file.name;
-          li.appendChild(a);
-          fileList.appendChild(li);
+          const div = document.createElement('div');
+          const button = document.createElement('button');
+          button.textContent = file.name;
+          button.addEventListener('click', () => {
+            window.open(file.url, '_blank');
+          });
+          div.appendChild(button);
+          fileList.appendChild(div);
         });
       })
       .catch(err => {
