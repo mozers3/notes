@@ -32,14 +32,13 @@
   <a href="#" id="link-all">All Files</a>
 </div>
 
-<ul id="fileList">Загрузка...</ul>
+<ul id="fileList">Loading...</ul>
 
 <script>
   const BASE_URL = 'https://script.google.com/macros/s/AKfycbzZkkFGOYbwY-BLySFjnWIFmGmhKB8cp5QAnBJ_4_SKKZBzX2alDBdfca8n25XuuBf6Yg/exec';
 
   const linkStarred = document.getElementById('link-starred');
   const linkAll = document.getElementById('link-all');
-  const titleEl = document.getElementById('title');
   const fileList = document.getElementById('fileList');
 
   function setActiveLink(isStarred) {
