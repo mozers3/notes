@@ -4,10 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <title>Google Drive Files</title>
   <style>
     div {
-        padding: 2px 4px;
+      padding: 2px 4px;
+    }
+    span {
+      width: 50%;
+    }
+    .nav a {
+      text-decoration: none;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .nav a.active {
+      background: #33CCFF;
     }
     button {
         width:70%;
@@ -40,9 +52,9 @@
 </head>
 <body>
 
-<div class="nav">
-  <a href="#" id="link-starred" class="active">Starred Files</a>
-  <a href="#" id="link-all">All Files</a>
+<div>
+  <span class="nav"><a href="#" id="link-starred" class="active">Starred Files</a></span>
+  <span class="nav"><a href="#" id="link-all">All Files</a></span>
 </div>
 
 <div id="fileList">Loading...</div>
